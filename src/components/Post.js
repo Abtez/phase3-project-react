@@ -31,8 +31,21 @@ export default function Post({addMagazine}){
             method:'POST', 
             headers:{'content-type' : 'application/json'},
             body: JSON.stringify(formData)
-        }).then(res => res.json()).then(data => addMagazine(data))
-        navigate('/');
+        })
+        .then(res => res.json())
+        .then(data => addMagazine(data))
+
+        alert("Your magazine has been successfully published!")
+        
+        setFormData({
+            title: "",
+            description: "",
+            category: "",
+            image: "",
+            user_id: currentUser.id
+        })
+
+        navigate("/")
         window.location.reload()
       }
 
@@ -43,7 +56,7 @@ export default function Post({addMagazine}){
                 <div className="col-md-4"></div>
                 <div className="col-md-4">
                 <h2 className="mt-4">Add New Magazine</h2>
-                    <form onSubmit={handleSubmit} className="mt-3">                        
+                    <form onSubmit={(e) => {handleSubmit(e)}} className="mt-3">                        
                         
                         <div>
                         <input type="text" value={formData.title} onChange={hanleInput} placeholder="Title" name="title" />

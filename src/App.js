@@ -3,15 +3,15 @@ import './App.css';
 import Home from './components/Home';
 import Nav from './components/Nav';
 import Post from './components/Post';
-import {Routes, Route, useNavigate} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import Register from './components/Register';
 import Login from './components/Login';
 
 
 function App() {
 
-  const navigate = useNavigate()
   const [loggedIn, setLoggedIn] = useState(false)
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
 
   const [magazines, setMagazines] = useState([])
@@ -19,6 +19,10 @@ function App() {
   const url = "http://localhost:9292/magazines"
 
   useEffect(() => {
+    if (currentUser) {
+      setLoggedIn(true)
+    }
+
     fetch(url)
       .then(res => res.json())
       .then(data => setMagazines(data))   
@@ -43,7 +47,7 @@ function App() {
         <Route exact path='/' element={<Home magazines={magazines} />} />
         <Route exact path='/register' element={<Register />} loggedIn={loggedIn} />
         <Route exact path='/login' element={<Login />} />
-        <Route exact path='/new-magazine' element={loggedIn ? <Post /> : navigate("/login")} />
+        <Route exact path='/new-magazine' element={loggedIn ? <Post /> : <Login />} addMagazine={addMagazine} />
       </Routes>
     </div>
   );
